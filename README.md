@@ -5,7 +5,7 @@
 -carrera: ing software, 5to semestre, Jornada Nocturna
 - universidad: Universitaria de colombia
 -nombre completo de cada integrante 
-Silvia Aguilar
+Silvia Fernanda Aguilar Hernandez
 Zuley Gomez
 Aura aponte
 Gustavo Holguin
