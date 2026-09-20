@@ -7,6 +7,11 @@ from glob import glob # Cuenta cuantas imagenes hay en la carpeta
 
 imagenes_carpeta = glob("./Proyecto/Recursos/Imagenes/*.jpg")
 
+
+
+
+
+
 def preparacion_img(imagen_a_Procesar):
     imagen_origin = cv2.imread(imagen_a_Procesar)
     if imagen_origin is None:
