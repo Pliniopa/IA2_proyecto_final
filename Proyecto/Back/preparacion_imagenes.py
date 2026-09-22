@@ -52,8 +52,8 @@ def preparacion_img(imagen_a_Procesar):
             cv2.putText(imagen_origin, f"{etiqueta} ({int(area)})", (x, y - 8),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, color_box, 1)
 
-
-        return imagen_limpia
+        imagen_limpia = cv2.resize( imagen_limpia, (100, 100)) #Redimensiona la imagen
+        return imagen_limpia.flatten() #aplanado de imagen para salida y almacenaje
 
 
 
