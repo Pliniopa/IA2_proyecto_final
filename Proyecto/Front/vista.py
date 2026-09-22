@@ -428,8 +428,3 @@ def crear_interfaz(modelo_entrenado):
 
     ventana.mainloop()
 
-
-# ==========================
-# MAIN
-# ==========================
-

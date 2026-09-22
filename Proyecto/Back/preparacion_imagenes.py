@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 
 
 def preparacion_img(imagen_a_Procesar):
