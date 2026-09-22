@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-def preparacion_img(imagen_a_Procesar, nombres):
+def preparacion_img(imagen_a_Procesar):
     imagen_origin = cv2.imread(imagen_a_Procesar)
     if imagen_origin is None:
         print("Imagenes no encontradas")

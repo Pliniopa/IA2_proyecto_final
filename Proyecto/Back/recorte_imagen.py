@@ -5,14 +5,14 @@ def recorte(ruta, array):
     # 1. Cargar la imagen original
     imagen = Image.open(ruta)
     texto = str(array)
-    resta = 100
+    resta = 300
     resta2 = 200
 
     # 2. Definir las coordenadas del cuadro: (izquierda, arriba, derecha, abajo)
     # Ejemplo: recortar un cuadro de 300x300 desde la posición (100, 50)
    
     izquierda = 846 - resta2
-    arriba = 761 - resta
+    arriba = 861 
 
     #izquierda = 846 - resta2
     #arriba = 761 - resta
@@ -22,7 +22,7 @@ def recorte(ruta, array):
     
     
     derecha = 2526
-    abajo = 2591
+    abajo = 2591 + resta
     
     
 
