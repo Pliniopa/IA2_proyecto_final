@@ -15,6 +15,3 @@ def obtener_nombres_jpg(ruta_carpeta):
     
     return np.array(nombres)
 
-# Ejemplo de uso:
-
-

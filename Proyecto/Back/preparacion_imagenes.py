@@ -1,25 +1,14 @@
 import cv2
 import numpy as np
 
-from glob import glob # Cuenta cuantas imagenes hay en la carpeta
 
-# 1. Cargar imagen en escala de grises / Preparación
-
-imagenes_carpeta = glob("./Proyecto/Recursos/Imagenes/*.jpg")
-
-
-
-
-
-
-def preparacion_img(imagen_a_Procesar):
+def preparacion_img(imagen_a_Procesar, nombres):
     imagen_origin = cv2.imread(imagen_a_Procesar)
     if imagen_origin is None:
         print("Imagenes no encontradas")
     else:
         imagen_gris = cv2.cvtColor(imagen_origin, cv2.COLOR_BGR2GRAY) # Paso 1 Pipeline: Conversión a escala de grises
         _, imagen_binaria = cv2.threshold(imagen_gris, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)# Paso 2 Pipeline: Umbralización (Otsu o Binaria Invertida según el fondo) Asumiendo objetos oscuros sobre fondo claro
-
         
 
         # Paso 3 Pipeline: Limpieza Morfológica (Apertura para eliminar ruido pequeño y separar contornos)
@@ -64,13 +53,11 @@ def preparacion_img(imagen_a_Procesar):
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, color_box, 1)
 
 
-        return imagen_limpia, imagen_origin
+        return imagen_limpia
 
 
 
 
-for i in range (len(imagenes_carpeta)+1):
-    imagen_a_tratar = f"./Proyecto/Recursos/Imagenes/img_{i}.jpg"
-    preparacion_img(imagen_a_tratar)
+
 
 
