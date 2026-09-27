@@ -50,6 +50,14 @@ face_cascade = cv2.CascadeClassifier(
     "haarcascade_frontalface_default.xml"
 )
 
+if face_cascade.empty():
+    print(
+        "[vista] ERROR: no se pudo cargar 'haarcascade_frontalface_default.xml'. "
+        "Esto suele pasar cuando está instalado 'opencv-python-headless' en vez de "
+        "'opencv-python' (el headless no incluye los archivos de datos). "
+        "Solución: pip uninstall opencv-python-headless && pip install opencv-python"
+    )
+
 
 ultimo_guardado = time.time()
 
@@ -60,12 +68,19 @@ def veri(ruta_imagen, modelo):
         ruta_imagen
     )
 
-    resultado = neuronas.consultar(
+    if img_test is None:
+        # La imagen recién capturada no se pudo procesar (archivo
+        # corrupto/ilegible); se reporta en vez de dejar que reviente
+        # neuronas.consultar() más adelante.
+        print(f"[veri] No se pudo preparar la imagen: {ruta_imagen}")
+        return None, 0.0
+
+    resultado, confianza = neuronas.consultar(
         modelo,
         [img_test]
     )
 
-    return resultado
+    return resultado, confianza
 
 
 def cerrar():
@@ -142,6 +157,11 @@ def conectar_camara():
             )
         return
 
+    # Liberar cualquier cámara previamente abierta antes de conectar una nueva
+    # (antes se sobrescribía 'cap' sin liberar el recurso anterior).
+    if cap is not None:
+        cap.release()
+
     cap = cv2.VideoCapture(url)
 
     if not cap.isOpened():
@@ -172,13 +192,29 @@ def actualizar_video():
 
     global ultimo_guardado
 
+    try:
+        _actualizar_video_interno()
+    except Exception as e:
+        # Antes, cualquier excepción aquí (p. ej. una imagen que no se pudo
+        # procesar) interrumpía el callback ANTES de llegar a
+        # ventana.after(...), y el video se congelaba sin aviso.
+        # Ahora se reporta el error y el video sigue actualizándose.
+        print(f"[actualizar_video] Error inesperado: {e}")
+        cambiar_estado("ERROR DE PROCESAMIENTO")
+
+    ventana.after(20, actualizar_video)
+
+
+def _actualizar_video_interno():
+
+    global ultimo_guardado
+
     if cap is not None:
 
         ret, frame = cap.read()
 
         if not ret:
             cambiar_estado("ERROR DE CONEXION")
-            ventana.after(1000, actualizar_video)
             return
         
 
@@ -233,17 +269,20 @@ def actualizar_video():
                 resultado, confianza = veri(ruta,
                                      modelo)
 
-                print("resultado:", resultado)
-                print("confianza", confianza)
-
-                if confianza >= 0.7:
-                    cambiar_estado(
-                        f"RECONOCIDO: {resultado[0]} ({confianza:.2f})"
-                    )
+                if resultado is None:
+                    # veri() no pudo procesar la foto recién guardada
+                    # (imagen inválida); antes esto tumbaba el ciclo entero.
+                    cambiar_estado("ERROR AL PROCESAR ROSTRO")
                 else:
-                    cambiar_estado(
+                    print("resultado:", resultado)
+                    print("confianza", confianza)
 
-                    f"NO RECONOCIDO")
+                    if confianza >= 0.7:
+                        cambiar_estado(
+                            f"RECONOCIDO: {resultado[0]} ({confianza:.2f})"
+                        )
+                    else:
+                        cambiar_estado("NO RECONOCIDO")
 
                 print(
                     "Capturada:",
@@ -295,11 +334,6 @@ def actualizar_video():
             )
 
         lbl_video.image = foto
-
-    ventana.after(
-        20,
-        actualizar_video
-    )
 
 
 # ==========================

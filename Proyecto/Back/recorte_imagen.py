@@ -28,12 +28,29 @@ def recorte(ruta, array):
 
     caja_corte = (izquierda, arriba, derecha, abajo)
 
+    # Validación: la caja de recorte debe caber dentro de la imagen real.
+    # Antes esto fallaba en silencio (PIL rellena con negro o recorta menos
+    # de lo esperado) cuando una imagen tenía otra resolución.
+    ancho_img, alto_img = imagen.size
+    if derecha > ancho_img or abajo > alto_img or izquierda < 0 or arriba < 0:
+        print(
+            f"[recorte] Aviso: la caja de recorte {caja_corte} excede el "
+            f"tamaño real de '{texto}' ({ancho_img}x{alto_img}). "
+            "Se ajustará a los límites de la imagen."
+        )
+        derecha = min(derecha, ancho_img)
+        abajo = min(abajo, alto_img)
+        izquierda = max(izquierda, 0)
+        arriba = max(arriba, 0)
+        caja_corte = (izquierda, arriba, derecha, abajo)
+
+    if derecha <= izquierda or abajo <= arriba:
+        print(f"[recorte] Error: caja de recorte inválida para '{texto}': {caja_corte}. Se omite.")
+        return
+
     # 3. Recortar la imagen
     imagen_recortada = imagen.crop(caja_corte)
 
-    
-    # 4. Guardar o mostrar el resultado
-    
-    
+    # 4. Guardar el resultado
     imagen_recortada.save(ruta_almacen)
     #imagen_recortada.show()
