@@ -65,7 +65,10 @@ xsalida,ysalida = neuronas.entrada(
 result = neuronas.entrenar(xsalida, ysalida)
 
 
-img = prep.preparacion_img( ruta_rec + "PARRA_PLINIO.jpg")
-print(neuronas.consultar(result, [img]))
+img = prep.preparacion_img(ruta_rec + "PARRA_PLINIO.jpg")
+if img is None:
+    print("No se pudo cargar la imagen de prueba 'PARRA_PLINIO.jpg' en", ruta_rec)
+else:
+    print(neuronas.consultar(result, [img]))
 
 vista.crear_interfaz(result) # lanzamiento de interfaz
