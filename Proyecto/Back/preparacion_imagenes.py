@@ -4,7 +4,8 @@ import cv2
 def preparacion_img(imagen_a_Procesar):
     imagen_origin = cv2.imread(imagen_a_Procesar)
     if imagen_origin is None:
-        print("Imagenes no encontradas")
+        print(f"[preparacion_img] No se pudo leer la imagen: {imagen_a_Procesar}")
+        return None
     else:
         imagen_gris = cv2.cvtColor(imagen_origin, cv2.COLOR_BGR2GRAY) # Paso 1 Pipeline: Conversión a escala de grises
         _, imagen_binaria = cv2.threshold(imagen_gris, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)# Paso 2 Pipeline: Umbralización (Otsu o Binaria Invertida según el fondo) Asumiendo objetos oscuros sobre fondo claro
