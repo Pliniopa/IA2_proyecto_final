@@ -1,0 +1,14 @@
+Coloca aquí tus fotos de referencia (una o varias por persona).
+
+Formato del nombre de archivo:
+  APELLIDO_NOMBRE.jpg
+
+Si una misma persona tiene más de una foto:
+  AGUILAR_SILVIA.jpg
+  AGUILAR_SILVIA_2.jpg
+
+Formatos aceptados: .jpg, .jpeg, .png
+
+Tip: usa capturar_foto_referencia.py para añadir fácilmente una foto
+tomada con tu propia webcam (mejora mucho la precisión).
+
